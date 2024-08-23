@@ -21,8 +21,8 @@ The DSA Visualizer is a project designed to illustrate and help understand vario
 
 ## Technologies Used
 
-- **Programming Languages:** [Specify the languages used, e.g., JavaScript, Python]
-- **Libraries and Frameworks:** [Specify any libraries or frameworks, e.g., D3.js for visualizations, React for UI]
+- **Programming Languages:** [JavaScript, html, css]
+- **Libraries:** [D3.js for visualizations]
 - **Tools:** [Specify any tools used for development, e.g., Git for version control, Webpack for bundling]
 
 ## Installation
