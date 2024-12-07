@@ -3,12 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Algorithm Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+            overflow: auto;
+        }
+        
+        h1, h2 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav a {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff073a; /* Neon red color */
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff4757;
+            text-shadow: 0 0 10px #ff073a, 0 0 20px #ff073a;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .title {
+            margin-bottom: 50px;
+        }
+
+        .title h1 {
+            font-size: 3rem;
+            color: #fff;
+        }
+
+        .subpage-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .subpage {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            width: 250px;
+            transition: transform 0.3s ease;
+        }
+
+        .subpage:hover {
+            transform: scale(1.05);
+            background-color: #444;
+        }
+
+        .subpage h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff073a;
+            font-size: 1.5rem;
+        }
+
+        .subpage p {
+            font-size: 1rem;
+            color: #bbb;
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .subpage img {
+            border: 1px solid #ff073a;
+            border-radius: 10px;
+            background: #ff073a;
+        }
+
+        .subpage img {
+            width: 100%;
+            margin-top: 14px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
-    <script src="index.js"></script>
-    <body>
-        <a href="html/binary_tree.html" target="_blank" class="pages"></a>
-        <a href="html/stack.html" target="_blank" class="pages"></a>
-    </body>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="./test3.html">Home</a>
+        <a href="./Docummentation.html">Documentation</a>
+        <a href="./About.html">About</a>
+    </nav>
+
+    <!-- Main Content Section -->
+    <div class="container">
+        <div class="title">
+            <h1>Welcome to the Algorithm Hub</h1>
+            <p>Explore various algorithms and techniques in a futuristic design.</p>
+        </div>
+
+        <!-- Subpage Links -->
+        <div class="subpage-links">
+            <a class="subpage" href="./html/binary_tree.html">
+                <h2>Binary Tree</h2>
+                <img src="./icons/BT5-removebg-preview.png" alt="Binary Tree">
+            </a>
+            <a class="subpage" href="./SortingModule/main.html">
+                <h2>Sorting</h2>
+                <img src="./icons/bar-chart.png" alt="Sorting">
+            </a>
+            <!-- <a class="subpage" href="./html/graphs.html">
+                <h2>Graph</h2>
+                <img src="./icons/1733595367380.png" alt="Graph">
+            </a> -->
+            <a class="subpage" href="./html/stack.html">
+                <h2>Array</h2>
+                <img src="./icons/array3-removebg-preview.png" alt="Array">
+            </a>
+        </div>
+        
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Algorithm Hub. All rights reserved.</p>
+    </footer>
+
+</body>
 </html>

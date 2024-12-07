@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #222629;
+        }
+        #chart {
+            border: 5px solid #ff073a;
+            border-radius: 8px;
+            border-style: groove;
+            height: 400px;
+            width: 99%; 
+            text-shadow: 0 0 5px #ff073a, 0 0 10px #ff073a, 0 0 20px #ff073a, 
+                        0 0 30px #ff4757, 0 0 40px #ff4757, 0 0 50px #ff4757;
+            font-weight: bold;
+            font-size: 2rem;
+        }
+        #header {
+            width: 99%;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        #workBench {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        #mySelect {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background: transparent;
+            padding: 10px;
+            display: inline-block;
+            height: 68px;
+            overflow: hidden;
+        }
+        #mySelect option {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            color: white;
+        }
+        #sort #restart {
+            border: none;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        * {
+            font-family: 'Orbitron', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <h1>Sorting Algorithms</h1>
+    </header>
+    <svg id="chart"></svg>
+    <div id="workBench">
+        <button id="sort">Sort</button>
+        <button id="restart">Restart</button>
+
+        <input type="range" id="slider" min="0" max="150" value="50">
+
+        <select id="mySelect" multiple size="5">
+            <option value="1" selected="true">Bubble Sort</option>
+            <option value="2">Selection Sort</option>
+            <option value="3">Insertion Sort</option>
+            <option value="4">Quick Sort</option>
+            <option value="5">Heap Sort</option>
+        </select>   
+    </div>
+
+    <script src="main.js" type="module"></script>
+</body>
+</html>
+
