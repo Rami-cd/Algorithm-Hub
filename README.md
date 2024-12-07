@@ -18,6 +18,14 @@ The DSA Visualizer is a project designed to illustrate and help understand vario
   - Selection Sort
   - Merge Sort
   - Quick Sort
+ 
+- **Sorting Algorithms in 2.0**
+  - Bubble Sort
+  - Insertion Sort
+  - Selection Sort
+  - Merge Sort
+  - Quick Sort
+The new sorting is not an array but a bar chart representation of the array.
 
 ## Technologies Used
 
@@ -29,6 +37,6 @@ The DSA Visualizer is a project designed to illustrate and help understand vario
 
 To run the project locally, follow these steps:
 
-1. **Clone the repository:**
+**Clone the repository:**
    ```bash
    git clone https://github.com/yourusername/dsa-visualizer.git
