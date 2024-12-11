@@ -18,6 +18,7 @@ const generateArray= (nb) => {
 }
 
 let arr = generateArray(nb) /*[40, 20, 10, 80, 60, 50, 7, 30, 100]*/;
+let sortedArr;
 
 const containerWidth = window.getComputedStyle(chart).width;
 const width = parseFloat(containerWidth);
@@ -64,14 +65,13 @@ let svg = renderChart(width, height, arr);
 const swap = (index1, index2, duration) => {
     // console.log(`index1: ${index1}, index2: ${index2}`);
     if(!running) return;
-    let temp = arr[index1];
-    arr[index1] = arr[index2];
-    arr[index2] = temp;
 
     const bar1 = d3.select(`#bar-${index1}`);
     const bar2 = d3.select(`#bar-${index2}`);
     const height1 = bar1.attr("height");
     const height2 = bar2.attr("height");
+    const correct1 = arr[index2]*4;
+    const correct2 = arr[index1]*4;
 
     const sharedTransition = d3.transition()
     .duration(50)
@@ -88,14 +88,29 @@ const swap = (index1, index2, duration) => {
         .transition()
         .delay(duration/10)
         .duration(duration/9)
-        .style("fill", "steelblue");
+        .style("fill", "steelblue")
+        .on("end", () => { 
+            if (bar1.attr("height") / 4 === sortedArr[index1]) {
+                console.log("match");
+                bar1.style("fill", "#B57EDC");
+            }
+        });
 
     bar2.transition(sharedTransition)
         .style("fill", "yellow")
         .transition()
         .delay(duration/10)
         .duration(duration/9)
-        .style("fill", "steelblue");
+        .style("fill", "steelblue")
+        .on("end", () => { 
+            if (bar2.attr("height") / 4 === sortedArr[index2]) {
+                console.log("match");
+                bar2.style("fill", "#B57EDC");
+            }
+        });
+    // console.log(sortedArr);
+    // console.log(sortedArr[sortedArr.length-1]);
+    //console.log("index: ",index1," : ", bar1.attr("height")/4, ", value: ", sortedArr[index1]);
 }
 
 let activeIntervalId;
@@ -134,6 +149,8 @@ const bubbleSortFun = (arr) => {
             }
         }
     }
+    sortedArr = arr;
+    console.log(sortedArr);
     return map;
 }
 
@@ -152,6 +169,7 @@ const selectionSortFun = (arr) => {
             map.push({cell1: i, cell2: minIndex});
         }
     }
+    sortedArr = arr;
     return map;
 }
 
@@ -169,6 +187,7 @@ const insertionSortFun = (arr) => {
         if(i !== j+1) map.push({cell1: j+1, cell2: i});
         arr[j + 1] = current;
     }
+    sortedArr = arr;
     return map;
 }
 
@@ -252,6 +271,7 @@ function heapSortFun(arr, map = []) {
         map.push({cell1: 0, cell2: i});
         heapify(arr, i, 0, map);
     }
+    sortedArr = arr;
 }
 
 function heapify(arr, n, i, map) {
@@ -277,7 +297,7 @@ const heapSort = (arr, duration) => {
 
 const quickSort = (arr, duration) => {
     let map = [];
-    quickSortFun(arr, 0, arr.length-1, map);
+    sortedArr = quickSortFun(arr, 0, arr.length-1, map);
     executeMap(map, duration);
 }
 
