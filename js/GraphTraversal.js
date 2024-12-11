@@ -1,8 +1,9 @@
-const width = 500, height = 600;
+const width = 500, height = 500;
 const graph = document.querySelector("#graph");
 const clear = document.querySelector("#clear");
 const create = document.querySelector("#create");
 let duration = 1200;
+let running = false;
 
 const createSVG = (graph, width, height) => {
     const svg = d3.select(graph)
@@ -53,7 +54,12 @@ const createNodes = (svg, nodes, links) => {
     nodeGroup.append("text")
             .attr("text-anchor", "middle")
             .attr("dy", ".3em")
-            .text(d => d.value);
+            .attr("fill", "black")
+            .attr("stroke", "none")
+            .text(d => d.value)
+            .style('font-family', 'Arial')
+            .style('font-size', '24px')
+            .style('font-weight', 'bold'); 
 
     // Update the simulation on each tick
     link.attr("d", d => {
@@ -78,7 +84,7 @@ const lightNode = (targetId) => {
     .filter(d => d.id === targetId)
     .transition()
     .duration(duration)
-    .style("fill", "yellow")
+    .style("fill", "#B57EDC")
     .transition()
     .delay(duration)
     .duration(duration)
@@ -94,7 +100,7 @@ const lightLink = (targetId) => {
       })
       .transition()
       .duration(duration)
-      .style("stroke", "yellow")
+      .style("stroke", "#B57EDC")
       .transition()
       .delay(duration)
       .duration(duration)
@@ -108,7 +114,7 @@ const nodesCandidates = [
   { id: 4, x: width*0.7, y: height*0.9, value: 0 },
   { id: 5, x: width*0.9, y: height*0.6, value: 0 },
   { id: 6, x: width*0.9, y: height*0.2, value: 0 },
-  { id: 7, x: width*2.5, y: height*0.6, value: 0 },
+  { id: 7, x: width*1.5, y: height*0.6, value: 0 },
   { id: 8, x: width*1.2, y: height*0.8, value: 0 }
 ];
 
@@ -154,22 +160,18 @@ const generateLinks = (nodes) => {
     let links = [];
     let nodeCount = nodes.length;
 
-    // Randomly generate directed links without creating loops
     for (let i = 0; i < nodeCount; i++) {
         let sourceNode = nodes[i];
-        
-        // Create a random number of links for each node (but avoid self loops)
-        let numLinks = Math.floor(Math.random() * 3) + 1;  // Adjust as necessary for your graph's density
+
+        // !
+        let numLinks = Math.floor(Math.random() * 2) + 1;
         
         for (let j = 0; j < numLinks; j++) {
-            if(links.length >= 9) return links;
-            // Randomly pick a target node that isn't the same as the source node
+            if(links.length >= 7) return links;
             let targetNode;
             do {
                 targetNode = nodes[Math.floor(Math.random() * nodeCount)];
             } while (targetNode.id === sourceNode.id || links.some(link => link.source.id === sourceNode.id && link.target.id === targetNode.id));
-
-            // Add the link if it's not a loop and doesn't already exist
             links.push({ source: sourceNode, target: targetNode });
         }
     }
@@ -178,7 +180,7 @@ const generateLinks = (nodes) => {
 };
 
 const createAdj = (nodes) => {
-    let adj = Array(nodes.length).fill(null).map(() => []); // Initialize an empty array for each node
+    let adj = Array(nodes.length).fill(null).map(() => []);
 
     const idToIndex = nodes.reduce((acc, node, index) => {
         acc[node.id] = index;
@@ -197,7 +199,7 @@ const createAdj = (nodes) => {
 function bfsHelper(adj, start, nodes, visited, nodesPath, edgesPath) {
     const queue = [];
 
-    visited[start.id] = true; // Use id directly
+    visited[start.id] = true;
     queue.push(start);
 
     while (queue.length) {
@@ -210,7 +212,7 @@ function bfsHelper(adj, start, nodes, visited, nodesPath, edgesPath) {
             for (const x of adj[curr.id]) {
                 if (!visited[x]) {
                     visited[x] = true;
-                    edgesPath.push(`${curr.id}-${nodes[x].id}`); // Use node's id for edges
+                    edgesPath.push(`${curr.id}-${nodes[x].id}`);
                     queue.push(nodes[x]);
                 }
             }
@@ -231,19 +233,19 @@ const bfs = (adj, nodes) => {
 }
 
 function dfsHelperIterative(adj, start, nodes, visited, nodesPath, edgesPath) {
-    const stack = [start]; // Use a stack for DFS
-    visited[start.id] = true; // Mark the start node as visited
+    const stack = [start];
+    visited[start.id] = true;
 
     while (stack.length) {
-        const current = stack.pop(); // Get the top node from the stack
-        nodesPath.push({ id: current.id, value: current.value }); // Add the node to the path
+        const current = stack.pop();
+        nodesPath.push({ id: current.id, value: current.value });
 
-        if (adj[current.id]) { // Check for neighbors
+        if (adj[current.id]) {
             for (const neighborId of adj[current.id]) {
                 if (!visited[neighborId]) {
-                    visited[neighborId] = true; // Mark as visited
-                    edgesPath.push(`${current.id}-${nodes[neighborId].id}`); // Record the edge
-                    stack.push(nodes[neighborId]); // Push the neighbor onto the stack
+                    visited[neighborId] = true;
+                    edgesPath.push(`${current.id}-${nodes[neighborId].id}`);
+                    stack.push(nodes[neighborId]);
                 }
             }
         }
@@ -251,45 +253,84 @@ function dfsHelperIterative(adj, start, nodes, visited, nodesPath, edgesPath) {
 }
 
 const dfs = (adj, nodes) => {
-    let visited = Array(nodes.length).fill(false); // Track visited nodes
-    let nodesPath = [], edgesPath = []; // Store the traversal paths
+    let visited = Array(nodes.length).fill(false);
+    let nodesPath = [], edgesPath = [];
 
     for (const current of nodes) {
-        if (!visited[current.id]) { // Start DFS only for unvisited nodes
+        if (!visited[current.id]) {
             dfsHelperIterative(adj, current, nodes, visited, nodesPath, edgesPath);
         }
     }
 
-    return { nodesPath, edgesPath }; // Return the traversal results
+    return { nodesPath, edgesPath };
 };
 
 const traversalPlanExecution = (duration, edgesPath, nodesPath) => {
     let index = 0;
+    console.log("edges ", edgesPath);
+    console.log("nodes ", nodesPath);
     const intervalId = setInterval(() => {
-    try {
-        lightLink(edgesPath[index]);
-        lightNode(nodesPath[index].id)
-    } catch(err) {
-        console.log("error: ", err);
-    }
-    index++;
-    if(index === nodesPath.length) {
-        clearInterval(intervalId);
+        if(!running) return;
+        try {
+            console.log(edgesPath[index][edgesPath[index].length-1])
+            lightLink(edgesPath[index]);
+            lightNode(parseInt(edgesPath[index][edgesPath[index].length-1]));
+        } catch(err) {
+            console.log("error: ", err);
+        }
+        if(!running) return;
+        index++;
+        if(index === edgesPath.length) {
+            clearInterval(intervalId);
         }
     }, duration);
 };
 
+let created = false;
+
 clear.addEventListener("click", () => {
+    if(!created) return;
+    created = false;
     clearSVG(svg);
-});
-create.addEventListener("click", () => {
+    selectElement.disabled = false;
+    create.disabled = false;
+    traverse.disabled = false;
+    created = true;
     svg = createSVG(graph, width, height);
     nodes = generateNodes(nodesCandidates);
     links = generateLinks(nodes);
     createNodes(svg, nodes, links);
-    const adj = createAdj(nodes);
-    // console.log(adj[0]);
-    const {nodesPath, edgesPath} = dfs(adj, nodes);
-    traversalPlanExecution(duration, edgesPath, nodesPath);
+});
+create.addEventListener("click", () => {
+    created = true;
+    svg = createSVG(graph, width, height);
+    nodes = generateNodes(nodesCandidates);
+    links = generateLinks(nodes);
     createNodes(svg, nodes, links);
+});
+
+const traverse = document.querySelector("#traverse");
+const selectElement = document.getElementById("mySelect");
+
+traverse.addEventListener("click", () => {
+    console.log("traverse");
+    running = true;
+    if(!created) return;
+    const adj = createAdj(nodes);
+    const {nodesPath, edgesPath} = dfs(adj, nodes);
+    console.log(selectElement.value)
+    selectElement.disabled = true;
+    create.disabled = true;
+    traverse.disabled = true;
+    switch (selectElement.value) {
+        case "1":
+            console.log("traverse");
+            traversalPlanExecution(duration, edgesPath, nodesPath);
+            break;
+        case "2":
+            traversalPlanExecution(duration, edgesPath, nodesPath);
+            break;
+        default:
+            break;
+    }
 });
